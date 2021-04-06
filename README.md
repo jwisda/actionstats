@@ -1,7 +1,7 @@
-# actionstats
+### actionstats
 ActionStats is simple statistical calculation package written in Go. It takes an "Action" which includes a name and a time and returns the average time for each action. ActionStats is written to accept concurrent calls to all functions.
 
-Example Implementation:
+### Example Implementation:
 
     package main
 
@@ -21,66 +21,72 @@ Example Implementation:
         log.Printf(aStat.GetStats())
     }
 
-Overview
+### Overview
 
 
-func New
+#### func New
     func new returns a new object ActionStats
-
     aStat := actionstats.New()
 
-Struct ActionStats
+#### Struct ActionStats
     Name string public property    
     Config type Config
 
-Struct Action
+#### Struct Action
     Action string //name of action
     Time int //
 
-Struct Stats
+#### Struct Stats
     Action string //name of action
     Avg int //average time
 
-func AddAction
+#### func AddAction
     Adds an action to the current list of tracked actions
     aStat.AddAction({"action":"name", "time":100})
 
-func GetStats
+#### func GetStats
     Retrieves the current stats of the tracked actions
     aStat.GetStats() returns string which are serialized Stats
 
-func TakeSnapshot
+#### func TakeSnapshot
     Takes a snapshot of the current tracked actions so that it can be persisted later
     aStat.TakeSnapshot() returns string
 
-func LoadSnapShot
+#### func LoadSnapShot
     Loads a previously taken snapshot into a new or existing ActionStats object
     aStat.LoadSnapshot(snapshot)
 
-Config
-	MinActionLength type int default = 1        
+### Config
+#### MinActionLength 
+	type int default = 1        
         Action string must be a least be this long
 	
-    MaxActionLength type int default = 20       
+#### MaxActionLength 
+	type int default = 20       
         Action string length must be less or equal to this number
 	
-    MinTime type int default = 0                
+#### MinTime 
+	type int default = 0                
         Time must be greater or equal to this, negative time doesn't make sense
 	
-    MaxTime = type int default = 24 * 3600 * 1000 
+#### MaxTime 
+	type int default = 24 * 3600 * 1000 
         lets just say that time is milli-seconds and that it must be less than one day
 
-	MaxActions type int default = 1000000
+#### MaxActions 
+	type int default = 1000000
         maximun number of actions stored
 
-	ActionCutSet type string default = " {}<>\"'`" 
+#### ActionCutSet 
+	type string default = " {}<>\"'`" 
         characters removed from the Action string name
 	
-    MakeActionLowerCase type boolean default = true 
+#### MakeActionLowerCase 
+	type boolean default = true 
         if false will allow mixed case action types
-}
 
-########## Original Specifications given were as follows:
+
+## Original Specifications given were as follows:
 
 Requirements This assignment may be completed in Java, Go, NodeJS, C++, or Python. Be sure to provide clear instructions on how to build and test your code. Please don’t make any assumptions about the environment that your code will be compiled/run in without explicitly stating those assumptions. Please try to limit the setup complexity by avoiding frameworks or libraries that are far from standard or require any advanced setup-- the simpler the better. If you have questions, please reach out. To submit your work please push to a public GitHub project and be sure to document any configuration or run instructions. We’re looking for a solution to the problem as well as attention to detail and code craftsmanship. Good luck and have fun! The assignment is to write a small library class that can perform the following operations:
 
@@ -103,5 +109,5 @@ Requirements This assignment may be completed in Java, Go, NodeJS, C++, or Pytho
     
     Assume that an end user will be making concurrent calls into all functions.
 
-##########
+##
 
