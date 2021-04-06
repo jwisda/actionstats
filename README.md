@@ -76,7 +76,7 @@ These config settings can be changed from the defaults. I cannot guarantee the c
 
 #### MaxActions 
 	type int default = 1000000
-        maximun number of actions stored
+        maximum number of actions stored
 
 #### ActionCutSet 
 	type string default = " {}<>\"'`" 
