@@ -87,7 +87,7 @@ These config settings can be changed from the defaults. I cannot guarantee the c
         if false will allow mixed case action types
 
 
-## Original Specifications given were as follows:
+## Original Specification
 
 Requirements This assignment may be completed in Java, Go, NodeJS, C++, or Python. Be sure to provide clear instructions on how to build and test your code. Please don’t make any assumptions about the environment that your code will be compiled/run in without explicitly stating those assumptions. Please try to limit the setup complexity by avoiding frameworks or libraries that are far from standard or require any advanced setup-- the simpler the better. If you have questions, please reach out. To submit your work please push to a public GitHub project and be sure to document any configuration or run instructions. We’re looking for a solution to the problem as well as attention to detail and code craftsmanship. Good luck and have fun! The assignment is to write a small library class that can perform the following operations:
 
