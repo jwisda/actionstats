@@ -28,16 +28,16 @@ ActionStats is simple statistical calculation package written in Go. It takes an
     aStat := actionstats.New()
 
 #### func AddAction
-    Adds an action to the current list of tracked actions
-    aStat.AddAction({"action":"name", "time":100})
+    Adds an action to the current list of tracked actions and returns an error. 
+    err := aStat.AddAction({"action":"name", "time":100})
 
 #### func GetStats
-    Retrieves the current stats of the tracked actions
-    aStat.GetStats() returns string which are serialized Stats
+    Returns the current Stats of the tracked actions in a json serialized string format.
+    stats := aStat.GetStats() 
 
 #### func TakeSnapshot
     Takes a snapshot of the current tracked actions so that it can be persisted later
-    aStat.TakeSnapshot() returns string
+    snapshot := aStat.TakeSnapshot() returns string
 
 #### func LoadSnapShot
     Loads a previously taken snapshot into a new or existing ActionStats object
@@ -56,7 +56,7 @@ ActionStats is simple statistical calculation package written in Go. It takes an
     Avg int //average time
 
 ### Config
-These config settings can be changed from the defaults. I cannot guarantee the code will work if you make extreme changes to these defaults.
+These config settings can be changed from the defaults. I cannot guarantee the code will work if you make changes to these defaults.
 
 #### MinActionLength 
 	type int default = 1        
