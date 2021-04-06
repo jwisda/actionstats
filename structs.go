@@ -30,14 +30,13 @@ type Snapshot struct {
 
 //Config: used to manage configuration
 //I made this public because it's convenient for someone update the config directly if they have particular needs
-//and can't work with the default config. Ideally this config would be stored with the serialized data but that
-//is an issue for another time and far outside the spec
+//and can't work with the default config. Ideally this config would be stored with the serialized data
 type Config struct {
 	MinActionLength     int    //action name must be a least be this long
 	MaxActionLength     int    //action name must be less or equal to this number
 	MinTime             int64  //time must be greater or equal to this
 	MaxTime             int64  //time must be less than this
-	MaxActions          int    //just setting an upper limit
+	MaxActions          int    //upper limit for total number of actions allowed
 	ActionCutSet        string //set of unwanted chars in string format
-	MakeActionLowerCase bool   //make the action string lower case
+	MakeActionLowerCase bool   //make the action string lower case otherwise mixed case will be allowed
 }

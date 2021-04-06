@@ -13,7 +13,7 @@ import (
 )
 
 type ActionStats struct {
-	//convenience placeholder for the name of this collection of stats
+	//convenience to keep the name of this collection of stats
 	Name string
 
 	//contains all the configurations of the component
@@ -30,12 +30,12 @@ type ActionStats struct {
 }
 
 //New function that returns a new object of type ActionStats
-func New(name string) ActionStats {
+func New() ActionStats {
 	var config Config
 	var actMux sync.Mutex
 	bigMaxInt := big.NewInt(math.MaxInt64)
 	actionTally := make(map[string]tallyStats)
-	as := ActionStats{name, &config, bigMaxInt, &actMux, actionTally}
+	as := ActionStats{"none", &config, bigMaxInt, &actMux, actionTally}
 	as.setDefaults()
 
 	return as
@@ -52,9 +52,10 @@ func (act ActionStats) AddAction(actionJson string) error {
 	}
 
 	// Add conditional checks here
-	// is action valid? spaces, empty, too short, too long, cut invalid chars, make action uppercase
+	// is action valid? spaces, empty, too short, too long, cut invalid chars
 	actionKey := strings.Trim(actionResult.Action, act.Config.ActionCutSet)
 
+	//make action lowercase - default setting
 	if act.Config.MakeActionLowerCase {
 		actionKey = strings.ToLower(actionKey)
 	}

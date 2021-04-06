@@ -2,6 +2,7 @@ package actionstats_test
 
 import (
 	"actionstats"
+	"encoding/json"
 	"fmt"
 	"log"
 	"math"
@@ -12,7 +13,7 @@ import (
 )
 
 func TestHappyPath(t *testing.T) {
-	as := actionstats.New("Test")
+	as := actionstats.New()
 
 	if err := as.AddAction("{\"action\":\"jump\", \"time\": 100}"); err != nil {
 		t.Error("failed to addAction ")
@@ -34,7 +35,7 @@ func TestHappyPath(t *testing.T) {
 }
 
 func TestNegTime(t *testing.T) {
-	as := actionstats.New("Test")
+	as := actionstats.New()
 	err := as.AddAction("{\"action\":\"jump\", \"time\": -100}")
 	if !ErrorContains(err, "ActionStats: Action jump Time -100 is invalid") {
 		t.Error("Negative Time Failed test ")
@@ -42,7 +43,7 @@ func TestNegTime(t *testing.T) {
 }
 
 func TestBadJson(t *testing.T) {
-	as := actionstats.New("Test")
+	as := actionstats.New()
 	err := as.AddAction("{\"action\":120, \"time\": \"-100\"}")
 	if !ErrorContains(err, "ActionStats: Action  Time 0 is invalid") {
 		t.Error("Bad Json Test failed ")
@@ -50,7 +51,7 @@ func TestBadJson(t *testing.T) {
 }
 
 func TestNameTooLong(t *testing.T) {
-	as := actionstats.New("Test")
+	as := actionstats.New()
 	err := as.AddAction("{\"action\":\"THIS IS OVER TWENTY CHARACTERS\", \"time\": 100}")
 	if !ErrorContains(err, "ActionStats: Action Key 'THIS IS OVER TWENTY CHARACTERS' is invalid") {
 		t.Error("Name Too Long failed test ")
@@ -58,7 +59,7 @@ func TestNameTooLong(t *testing.T) {
 }
 
 func TestNameTooShort(t *testing.T) {
-	as := actionstats.New("Test")
+	as := actionstats.New()
 	err := as.AddAction("{\"action\":\"\", \"time\": 100}")
 	if !ErrorContains(err, "ActionStats: Action Key '' is invalid") {
 		t.Error("Name Too Short failed test ")
@@ -66,7 +67,7 @@ func TestNameTooShort(t *testing.T) {
 }
 
 func TestTimeTooBig(t *testing.T) {
-	as := actionstats.New("Test")
+	as := actionstats.New()
 	test := fmt.Sprintf("{\"action\":\"jump\", \"time\": %v }", int(math.Pow(2, 60)-1))
 	err := as.AddAction(test)
 	if !ErrorContains(err, "ActionStats: Action jump Time 1152921504606846976 is invalid") {
@@ -74,11 +75,9 @@ func TestTimeTooBig(t *testing.T) {
 	}
 }
 
-//TestTimeOverMax this test should hit the overflow test for integers
-// and verifies that actionstats works with concurrent processes
-
+//TestTimeOverflow this test should hit the overflow test for integers
 func TestTimeOverflow(t *testing.T) {
-	as := actionstats.New("Test")
+	as := actionstats.New()
 	as.Config.MaxTime = int64(math.Pow(2, 61) - 1)
 	test := fmt.Sprintf("{\"action\":\"jump\", \"time\": %v }", int(math.Pow(2, 61)-1))
 	for i := 0; i < 4; i++ {
@@ -93,9 +92,9 @@ func TestTimeOverflow(t *testing.T) {
 }
 
 func TestMaxActions(t *testing.T) {
-	as := actionstats.New("Test")
+	as := actionstats.New()
 	as.Config.MaxActions = 8
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 8; i++ {
 		test := fmt.Sprintf("{\"action\":\"test%v\", \"time\": %v }", i, 10)
 		err := as.AddAction(test)
 		if err != nil {
@@ -108,15 +107,15 @@ func TestMaxActions(t *testing.T) {
 }
 
 func TestConcurrency(t *testing.T) {
-	as := actionstats.New("Test")
+	as := actionstats.New()
 	testChars := []byte("asdfghjklqwertyuiopzxcvbnm")
 
 	var wg sync.WaitGroup //wait for it...
 
-	for i := 0; i < 500000; i++ {
+	for i := 0; i < 1000000; i++ {
 		wg.Add(1)
 		action := ""
-		for i := 0; i < 3; i++ {
+		for i := 0; i < 3; i++ { //26^3 = 17576 string combos
 			action = action + string(testChars[rand.Intn(len(testChars))])
 		}
 		time := rand.Intn(10000)
@@ -126,7 +125,7 @@ func TestConcurrency(t *testing.T) {
 			defer wg.Done()
 			err := as.AddAction(actionstr)
 			if err != nil && !ErrorContains(err, "ActionStats: Action jump exceeds MaxInt64") {
-				t.Error("Time over Max failed test ")
+				t.Error("Concurrency test failed")
 			}
 		}(actionStr, &wg)
 
@@ -135,18 +134,32 @@ func TestConcurrency(t *testing.T) {
 			go func(i int, wg *sync.WaitGroup) {
 				defer wg.Done()
 				stat := as.GetStats()
-				log.Printf("time over max results %v %v\n", stat, i)
+
+				statResult := make([]actionstats.Stats, 0, 100)
+				if jsonErr := json.Unmarshal([]byte(stat), &statResult); jsonErr != nil {
+					//return jsonErr
+					t.Error(fmt.Sprintf("Concurrency stat results failed to unmarshall %v", jsonErr))
+				}
+				//log.Printf("Length of Stat results %v %v\n", len(statResult), i)
+
 			}(i, &wg)
 		}
 	}
 
 	wg.Wait()             //wait for all processes to complete
-	stat := as.GetStats() //one final GetStats just to make sure everything is running
-	fmt.Printf("time over max results %v \n", stat)
+	stat := as.GetStats() //one final GetStats just to make sure everything is working
+
+	statResult := make([]actionstats.Stats, 0, 100)
+	if jsonErr := json.Unmarshal([]byte(stat), &statResult); jsonErr != nil {
+		//return jsonErr
+		t.Error(fmt.Sprintf("Concurrency stat results failed to unmarshall %v", jsonErr))
+	}
+
+	fmt.Printf("Final length of stat results %v \n", len(statResult))
 }
 
 func TestEmptySerialization(t *testing.T) {
-	as := actionstats.New("Test")
+	as := actionstats.New()
 	//snapshot := as.TakeSnapshot()
 	snapshot := "[[[[{{}}]]]]"
 	err := as.LoadSnapshot(snapshot)
@@ -156,7 +169,7 @@ func TestEmptySerialization(t *testing.T) {
 }
 
 func TestEmptyStats(t *testing.T) {
-	as := actionstats.New("Test")
+	as := actionstats.New()
 	testStat := as.GetStats()
 	if testStat != "[]" {
 		t.Error("failed EmptyStats test")
@@ -165,7 +178,7 @@ func TestEmptyStats(t *testing.T) {
 
 func TestSerialization(t *testing.T) {
 	testChars := []byte("asdfghjklqwertyuiopzxcvbnm!@#$%^&*(_+-={}[]:;<>?,./")
-	as := actionstats.New("Test")
+	as := actionstats.New()
 
 	for i := 0; i < 100000; i++ {
 		action := ""
@@ -176,7 +189,7 @@ func TestSerialization(t *testing.T) {
 		data := fmt.Sprintf("{\"action\":\"%v\", \"time\":%v}", action, time)
 		err := as.AddAction(data)
 		if err != nil {
-			log.Printf("error trapped on TestSerializtion %v", err)
+			//log.Printf("error trapped on TestSerializtion %v", err)
 		}
 	}
 
@@ -184,7 +197,7 @@ func TestSerialization(t *testing.T) {
 	snapshot := as.TakeSnapshot()
 
 	//create new object
-	as2 := actionstats.New("Test2")
+	as2 := actionstats.New()
 
 	err := as2.LoadSnapshot(snapshot)
 	if err != nil {
@@ -208,11 +221,6 @@ func TestSerialization(t *testing.T) {
 	}
 }
 
-// ErrorContains checks if the error message in out contains the text in
-// want.
-//
-// This is safe when out is nil. Use an empty string for want if you want to
-// test that err is nil.
 func ErrorContains(err error, errString string) bool {
 	if err == nil {
 		return errString == ""
