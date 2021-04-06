@@ -28,8 +28,10 @@ ActionStats is simple statistical calculation package written in Go. It takes an
     aStat := actionstats.New()
 
 #### func AddAction
-    Adds an action to the current list of tracked actions and returns an error. 
-    err := aStat.AddAction({"action":"name", "time":100})
+    Adds an action to the current list of tracked actions and returns an error. Errors must be checked on return to ensure an update. 
+
+    actionJsonTemplate := "{\"action\":\"%v\", \"time\":%v}"
+    err := aStat.AddAction(fmt.Sprintf(actionJsonTemplate, "jump", 100))
 
 #### func GetStats
     Returns the current Stats of the tracked actions in a json serialized string format.
