@@ -1,5 +1,5 @@
 ### actionstats
-ActionStats is simple statistical calculation package written in Go. It takes an "Action" which includes a name and a time. At any point it can return the current average time for each action. ActionStats is written to accept concurrent calls to all functions.
+ActionStats is simple statistical calculation package written in Go. It takes an "Action" which includes a name and a time. Upon request it can return the current average time for each action. ActionStats is written to accept concurrent calls to all functions.
 
 ### Example Implementation:
 
