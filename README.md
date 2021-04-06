@@ -56,6 +56,8 @@ ActionStats is simple statistical calculation package written in Go. It takes an
     Avg int //average time
 
 ### Config
+These config settings can be changed from the defaults. I cannot guarantee the code will work if you make extreme changes to these defaults.
+
 #### MinActionLength 
 	type int default = 1        
         Action string must be a least be this long
