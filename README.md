@@ -1,5 +1,5 @@
 ### actionstats
-ActionStats is simple statistical calculation package written in Go. It takes an "Action" which includes a name and a time and returns the average time for each action. ActionStats is written to accept concurrent calls to all functions.
+ActionStats is simple statistical calculation package written in Go. It takes an "Action" which includes a name and a time. At any point it can return the current average time for each action. ActionStats is written to accept concurrent calls to all functions.
 
 ### Example Implementation:
 
@@ -23,22 +23,9 @@ ActionStats is simple statistical calculation package written in Go. It takes an
 
 ### Overview
 
-
 #### func New
     func new returns a new object ActionStats
     aStat := actionstats.New()
-
-#### Struct ActionStats
-    Name string public property    
-    Config type Config
-
-#### Struct Action
-    Action string //name of action
-    Time int //
-
-#### Struct Stats
-    Action string //name of action
-    Avg int //average time
 
 #### func AddAction
     Adds an action to the current list of tracked actions
@@ -55,6 +42,18 @@ ActionStats is simple statistical calculation package written in Go. It takes an
 #### func LoadSnapShot
     Loads a previously taken snapshot into a new or existing ActionStats object
     aStat.LoadSnapshot(snapshot)
+
+#### Struct ActionStats
+    Name string public property    
+    Config type Config
+
+#### Struct Action
+    Action string //name of action
+    Time int //
+
+#### Struct Stats
+    Action string //name of action
+    Avg int //average time
 
 ### Config
 #### MinActionLength 
