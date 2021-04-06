@@ -24,7 +24,7 @@ ActionStats is simple statistical calculation package written in Go. It takes an
 ### Overview
 
 #### func New
-    func new returns a new object ActionStats
+    returns a new object ActionStats
     aStat := actionstats.New()
 
 #### func AddAction
