@@ -94,7 +94,7 @@ func TestTimeOverflow(t *testing.T) {
 func TestMaxActions(t *testing.T) {
 	as := actionstats.New()
 	as.Config.MaxActions = 8
-	for i := 0; i < 8; i++ {
+	for i := 0; i < 9; i++ {
 		test := fmt.Sprintf("{\"action\":\"test%v\", \"time\": %v }", i, 10)
 		err := as.AddAction(test)
 		if err != nil {

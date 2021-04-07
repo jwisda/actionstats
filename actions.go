@@ -12,7 +12,7 @@ import (
 	"sync"
 )
 
-type ActionStats struct {
+type ActionStats struct { //as close to a class lib as possible with Go
 	//convenience to keep the name of this collection of stats
 	Name string
 
@@ -42,6 +42,23 @@ func New() ActionStats {
 }
 
 func (act ActionStats) AddAction(actionJson string) error {
+	/*=============================================================================================
+	This function adds an action to the actionTally. actionTally keeps a list of actions with overall
+	times and a count of the calls.
+	Input:		Json Action {"action":"actionname", "time": number}
+
+	Output:
+	An Error is returned. If error returned equals nil then no error occured.
+
+	Possible errors returned include:
+	Action is invalid,
+	Action key is invalid,
+	MaxActions are exceeded,
+	Action exceeds MaxInt64 (or overflow)
+
+	An error will be logged if data is not returned
+	=================================================================================*/
+
 	var err error
 	var actionResult Action
 
@@ -73,7 +90,7 @@ func (act ActionStats) AddAction(actionJson string) error {
 	defer act.actionMux.Unlock()
 
 	if actionItem, ok := act.actionTally[actionKey]; !ok {
-		if len(act.actionTally)+1 < act.Config.MaxActions {
+		if len(act.actionTally) < act.Config.MaxActions {
 			act.actionTally[actionKey] = tallyStats{actionResult.Time, 1}
 		} else {
 			return errors.New(fmt.Sprintf("ActionStats: Action %v MaxActions %v are exceeded", actionResult.Action, act.Config.MaxActions))
@@ -94,6 +111,16 @@ func (act ActionStats) AddAction(actionJson string) error {
 }
 
 func (act ActionStats) GetStats() string {
+	/*=============================================================================================
+	This function gets the current stats for the actionTally. actionTally keeps a list of actions with overall
+	times and a count of the calls.
+	Input:		none
+
+	Output:
+	A Json string of serialized Stat structs
+	Example: [{"action":"jump","avg":150},{"action":"run","avg":75}]
+	=================================================================================*/
+
 	statResults := "[]" //empty json array
 	stats := make([]Stats, 0, len(act.actionTally))
 
