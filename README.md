@@ -14,6 +14,7 @@ ActionStats is simple statistical calculation package written in Go. It takes an
         aStat := actionstats.New()
         actionJsonTemplate := "{\"action\":\"%v\", \"time\":%v}"
 
+	aStat.Config.MinTime = 10
         aStat.AddAction(fmt.Sprintf(actionJsonTemplate, "jump", 100))    
         aStat.AddAction(fmt.Sprintf(actionJsonTemplate, "run", 75))    
         aStat.AddAction(fmt.Sprintf(actionJsonTemplate, "jump", 200))    
@@ -57,8 +58,8 @@ ActionStats is simple statistical calculation package written in Go. It takes an
     aStat2.LoadSnapshot(snapshot)
 
 #### Struct ActionStats
-    Name string public property    
-    Config type Config
+    Name string    
+    Config type *Config
 
 #### Struct Action
     Action string //name of action
@@ -69,7 +70,7 @@ ActionStats is simple statistical calculation package written in Go. It takes an
     Avg int //average time
 
 ### Config
-These config settings can be changed from the defaults. I cannot guarantee the code will work if you make changes to these defaults.
+These config settings can be changed from the defaults. The code may not work if you make changes to these defaults.
 
 #### MinActionLength 
     type int default = 1        
@@ -100,9 +101,10 @@ These config settings can be changed from the defaults. I cannot guarantee the c
     if false will allow mixed case action types
 
 
-## Original Specification
+## Original Requirements
 
-Requirements This assignment may be completed in Java, Go, NodeJS, C++, or Python. Be sure to provide clear instructions on how to build and test your code. Please don’t make any assumptions about the environment that your code will be compiled/run in without explicitly stating those assumptions. Please try to limit the setup complexity by avoiding frameworks or libraries that are far from standard or require any advanced setup-- the simpler the better. If you have questions, please reach out. To submit your work please push to a public GitHub project and be sure to document any configuration or run instructions. We’re looking for a solution to the problem as well as attention to detail and code craftsmanship. Good luck and have fun! The assignment is to write a small library class that can perform the following operations:
+### Requirements 
+This assignment may be completed in Java, Go, NodeJS, C++, or Python. Be sure to provide clear instructions on how to build and test your code. Please don’t make any assumptions about the environment that your code will be compiled/run in without explicitly stating those assumptions. Please try to limit the setup complexity by avoiding frameworks or libraries that are far from standard or require any advanced setup-- the simpler the better. If you have questions, please reach out. To submit your work please push to a public GitHub project and be sure to document any configuration or run instructions. We’re looking for a solution to the problem as well as attention to detail and code craftsmanship. Good luck and have fun! The assignment is to write a small library class that can perform the following operations:
 
     Add Action 
     
