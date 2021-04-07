@@ -25,25 +25,36 @@ ActionStats is simple statistical calculation package written in Go. It takes an
 
 #### func New
     returns a new object ActionStats
+        
+    aStat := actionstats.New()
     aStat := actionstats.New()
 
 #### func AddAction
     Adds an action to the current list of tracked actions and returns an error. Errors must be checked on return to ensure an update. 
 
+    sStat := actionstats.New()
     actionJsonTemplate := "{\"action\":\"%v\", \"time\":%v}"
     err := aStat.AddAction(fmt.Sprintf(actionJsonTemplate, "jump", 100))
 
 #### func GetStats
     Returns the current Stats of the tracked actions in a json serialized string format.
+
+    aStat := actionstats.New()
     stats := aStat.GetStats() 
 
 #### func TakeSnapshot
     Takes a snapshot of the current tracked actions so that it can be persisted later
+
+    aStat := actionstats.New()
     snapshot := aStat.TakeSnapshot() //returns string
 
 #### func LoadSnapShot
     Loads a previously taken snapshot into a new or existing ActionStats object
-    aStat.LoadSnapshot(snapshot)
+
+    aStat := actionstats.New()
+    snapshot := aStat.TakeSnapshot() //returns string
+    aStat2 := actionstats.New()
+    aStat2.LoadSnapshot(snapshot)
 
 #### Struct ActionStats
     Name string public property    
@@ -61,32 +72,32 @@ ActionStats is simple statistical calculation package written in Go. It takes an
 These config settings can be changed from the defaults. I cannot guarantee the code will work if you make changes to these defaults.
 
 #### MinActionLength 
-	type int default = 1        
-        Action string must be a least be this long
+    type int default = 1        
+    Action string must be a least be this long
 	
 #### MaxActionLength 
-	type int default = 20       
-        Action string length must be less or equal to this number
+    type int default = 20       
+    Action string length must be less or equal to this number
 	
 #### MinTime 
-	type int default = 0                
-        Time must be greater or equal to this, negative time doesn't make sense
+    type int default = 0                
+    Time must be greater or equal to this, negative time doesn't make sense
 	
 #### MaxTime 
-	type int default = 24 * 3600 * 1000 
-        lets just say that time is milli-seconds and that it must be less than one day
+    type int default = 24 * 3600 * 1000 
+    lets just say that time is milli-seconds and that it must be less than one day
 
 #### MaxActions 
-	type int default = 1000000
-        maximum number of actions stored
+    type int default = 1000000
+    maximum number of actions stored
 
 #### ActionCutSet 
-	type string default = " {}<>\"'`" 
-        characters removed from the Action string name
+    type string default = " {}<>\"'`" 
+    characters removed from the Action string name
 	
 #### MakeActionLowerCase 
-	type boolean default = true 
-        if false will allow mixed case action types
+    type boolean default = true 
+    if false will allow mixed case action types
 
 
 ## Original Specification
