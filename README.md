@@ -14,7 +14,7 @@ ActionStats is simple statistical calculation package written in Go. It takes an
         aStat := actionstats.New()
         actionJsonTemplate := "{\"action\":\"%v\", \"time\":%v}"
 
-	aStat.Config.MinTime = 10
+        aStat.Config.MinTime = 10
         aStat.AddAction(fmt.Sprintf(actionJsonTemplate, "jump", 100))    
         aStat.AddAction(fmt.Sprintf(actionJsonTemplate, "run", 75))    
         aStat.AddAction(fmt.Sprintf(actionJsonTemplate, "jump", 200))    
