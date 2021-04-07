@@ -9,8 +9,10 @@ ActionStats is simple statistical calculation package written in Go. It takes an
     package main
 
     import (
-        "github.com/jwisda/actionstats"
+        "fmt"
         "log"
+
+        "github.com/jwisda/actionstats"
     )
 
     func main() {
