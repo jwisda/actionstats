@@ -52,7 +52,9 @@ ActionStats is simple statistical calculation package written in Go. It takes an
     Loads a previously taken snapshot into a new or existing ActionStats object
 
     aStat := actionstats.New()
+    // maybe add some actions here
     snapshot := aStat.TakeSnapshot() //returns string
+    
     aStat2 := actionstats.New()
     aStat2.LoadSnapshot(snapshot)
 
