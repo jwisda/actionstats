@@ -49,6 +49,7 @@ ActionStats is a simple statistical calculation package written in Go. It takes 
     Returns the current Stats of the tracked actions in a json serialized string format.
 
     aStat := actionstats.New()
+    //add data here
     stats := aStat.GetStats() 
     
     //returns a list of [{"action":string,"avg":integer}]
