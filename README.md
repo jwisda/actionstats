@@ -26,6 +26,7 @@ ActionStats is a simple statistical calculation package written in Go. It takes 
 
         log.Printf(aStat.GetStats())
     }
+    // returns [{"action":"jump","avg":150},{"action":"run","avg":75}]
 
 ### Overview
 
@@ -49,6 +50,8 @@ ActionStats is a simple statistical calculation package written in Go. It takes 
 
     aStat := actionstats.New()
     stats := aStat.GetStats() 
+    
+    //returns a list of [{"action":string,"avg":integer}]
 
 #### func TakeSnapshot
     Takes a snapshot of the current tracked actions so that it can be persisted later
