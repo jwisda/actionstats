@@ -3,6 +3,9 @@ ActionStats is a simple statistical calculation package written in Go. It takes 
 
 ### Install Package
     go get github.com/jwisda/actionstats
+    
+### Execute Tests on Package
+    go test $GOPATH/src/github.com/jwisda/actionstats
 
 ### Example Implementation:
 
